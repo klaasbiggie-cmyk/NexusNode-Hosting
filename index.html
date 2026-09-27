@@ -1,787 +1,1142 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusNode Hosting - Premium Game & Server Hosting</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ApexNode Hosting — Premium Game & VPS Hosting</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef6ff',
+                            100: '#e0edff',
+                            400: '#3882f6',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            accent: '#3b82f6',
+                            bgDark: '#070a12',
+                            cardDark: '#0e1526',
+                            borderDark: '#1b273d'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
-        :root {
-            --bg-color: #0b0e14;
-            --card-bg: rgba(21, 25, 34, 0.85);
-            --accent-blue: #00f2fe;
-            --accent-purple: #7f00ff;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --text-main: #ffffff;
-            --text-muted: #a0aec0;
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --ptero-blue: #2b5cb8;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
-        }
-
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
+            background-color: #060911;
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(127, 0, 255, 0.05) 0%, transparent 40%);
         }
 
-        /* Top Bar & Nav */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background: rgba(11, 14, 20, 0.9);
+        .font-display {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero-bg {
+            background: linear-gradient(180deg, rgba(7, 10, 18, 0.8) 0%, rgba(6, 9, 17, 1) 100%), 
+                        url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
+        }
+
+        .glass-card {
+            background: rgba(14, 21, 38, 0.75);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--glass-border);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
+        .glass-card:hover {
+            border-color: rgba(37, 99, 235, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(37, 99, 235, 0.25);
         }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-            align-items: center;
+        .glow-blue {
+            box-shadow: 0 0 25px rgba(37, 99, 235, 0.35);
         }
 
-        .nav-links a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s;
+        /* Flag Circles */
+        .flag-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            display: inline-block;
         }
 
-        .nav-links a:hover {
-            color: var(--accent-blue);
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060911;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1b273d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
         }
 
-        .btn-admin {
-            background: linear-gradient(135deg, var(--accent-purple), #5b21b6);
-            color: #fff !important;
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
+        /* Pterodactyl Dashboard Specific Styling */
+        .ptero-bg {
+            background-color: #0d121d;
+            background-image: 
+                radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
         }
 
-        .btn-ptero {
-            background: linear-gradient(135deg, var(--ptero-blue), #1d4ed8);
-            color: #fff !important;
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-
-        /* Main Container Views */
-        .view-section {
-            display: none;
-            padding-top: 100px;
-            min-height: 100vh;
-        }
-
-        .view-section.active {
-            display: block;
-        }
-
-        /* Hero Banner */
-        .hero {
-            text-align: center;
-            padding: 60px 20px 40px;
-        }
-
-        .hero h1 {
-            font-size: 3.2rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 15px;
-        }
-
-        .gradient-text {
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            color: var(--text-muted);
-            font-size: 1.15rem;
-            max-width: 650px;
-            margin: 0 auto 30px;
-        }
-
-        /* Filter Tabs */
-        .category-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 40px;
-        }
-
-        .tab-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            padding: 10px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .tab-btn.active, .tab-btn:hover {
-            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(127, 0, 255, 0.2));
-            border-color: var(--accent-blue);
-            color: #fff;
-        }
-
-        /* Cards Grid */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px 80px;
-        }
-
-        .pack-card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            padding: 30px;
-            position: relative;
-            backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.3s, border-color 0.3s;
-        }
-
-        .pack-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 242, 254, 0.4);
-        }
-
-        .badge-popular {
+        .ptero-watermark {
             position: absolute;
-            top: -12px;
-            right: 20px;
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
-            color: #000;
-            font-weight: 700;
-            font-size: 0.75rem;
-            padding: 4px 12px;
-            border-radius: 20px;
+            right: 4%;
+            bottom: 12%;
+            font-size: 6rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.025);
+            pointer-events: none;
+            user-select: none;
+            line-height: 0.9;
+            text-align: right;
             text-transform: uppercase;
         }
 
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
+        .ptero-card {
+            background-color: #121929;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
         }
 
-        .card-header i {
-            font-size: 2rem;
-            color: var(--accent-blue);
-        }
-
-        .card-header h3 {
-            font-size: 1.4rem;
-        }
-
-        .price-tag {
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-        }
-
-        .price-tag span {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .specs-list {
-            list-style: none;
-            margin-bottom: 25px;
-        }
-
-        .specs-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .specs-list li i {
-            color: var(--accent-blue);
-        }
-
-        .btn-order {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(90deg, var(--accent-blue), #4facfe);
-            border: none;
-            border-radius: 8px;
-            color: #000;
-            font-weight: 700;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .btn-order:hover {
-            opacity: 0.9;
-        }
-
-        /* Admin Panel Styles */
-        .admin-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--card-bg);
-            padding: 20px 30px;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            margin-bottom: 30px;
-        }
-
-        .admin-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-        }
-
-        .admin-card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 25px;
-        }
-
-        .admin-card h2 {
-            font-size: 1.25rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--accent-blue);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px 14px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 6px;
-            color: #fff;
-            outline: none;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--accent-blue);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .btn-save {
-            background: var(--accent-green);
-            color: #000;
-            font-weight: 700;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .pack-management-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .pack-item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.3);
-            padding: 15px 20px;
-            border-radius: 8px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .pack-item-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-icon {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: #fff;
-            width: 35px;
-            height: 35px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-icon.delete {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--accent-red);
-        }
-
-        /* Modal Authentication */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-box {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            padding: 35px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .admin-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 2.2rem; }
-            .nav-links { display: none; }
+        .ptero-sidebar-item.active {
+            background-color: #10b98120;
+            color: #10b981;
+            border-left: 3px solid #10b981;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between antialiased">
 
-    <!-- Navigatie -->
-    <nav>
-        <div class="logo-container" onclick="switchView('store')">
-            <svg viewBox="0 0 500 120" width="160">
-                <defs>
-                    <linearGradient id="nexusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#00f2fe" />
-                        <stop offset="100%" stop-color="#4facfe" />
-                    </linearGradient>
-                    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#7f00ff" />
-                        <stop offset="100%" stop-color="#e100ff" />
-                    </linearGradient>
-                </defs>
-                <g transform="translate(10, 10)">
-                    <polygon points="50,5 90,27 90,73 50,95 10,73 10,27" fill="none" stroke="url(#nexusGrad)" stroke-width="4"/>
-                    <path d="M 30,70 L 30,30 L 70,70 L 70,30" fill="none" stroke="url(#accentGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="30" cy="30" r="5" fill="#00f2fe"/>
-                    <circle cx="70" cy="70" r="5" fill="#e100ff"/>
-                </g>
-                <text x="120" y="58" font-family="sans-serif" font-weight="800" font-size="36" fill="#fff">NEXUS<tspan fill="url(#nexusGrad)">NODE</tspan></text>
-                <text x="122" y="82" font-family="sans-serif" font-weight="600" font-size="13" fill="#a0aec0">PREMIUM HOSTING</text>
-            </svg>
-        </div>
-
-        <div class="nav-links">
-            <a href="#" onclick="switchView('store')"><i class="fas fa-store"></i> Store</a>
-            <a id="pteroNavLink" href="https://panel.yourdomain.com" target="_blank" class="btn-ptero">
-                <i class="fas fa-server"></i> Pterodactyl Panel
-            </a>
-            <button class="btn-admin" onclick="openAdminModal()">
-                <i class="fas fa-user-shield"></i> Admin Panel
-            </button>
-        </div>
-    </nav>
-
-    <!-- STORE FRONTEND VIEW -->
-    <div id="store-view" class="view-section active">
-        <section class="hero">
-            <h1>Next-Gen <span class="gradient-text">Game Hosting</span></h1>
-            <p>Direct gekoppeld aan Pterodactyl v1.x Panel. Hoge performance Ryzen 9 nodes, NVMe opslag en instant server deployment.</p>
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 bg-[#070a12]/90 backdrop-blur-md border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             
-            <div class="category-tabs">
-                <button class="tab-btn active" onclick="filterCategory('all', this)"><i class="fas fa-layer-group"></i> Alles</button>
-                <button class="tab-btn" onclick="filterCategory('fivem', this)"><i class="fas fa-car"></i> FiveM</button>
-                <button class="tab-btn" onclick="filterCategory('minecraft', this)"><i class="fas fa-cube"></i> Minecraft</button>
-                <button class="tab-btn" onclick="filterCategory('discord', this)"><i class="fab fa-discord"></i> Discord Bots</button>
+            <!-- Logo -->
+            <a href="#" onclick="switchView('store')" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-[2px] glow-blue transition-transform group-hover:scale-105">
+                    <div class="w-full h-full bg-[#070a12] rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-cube text-cyan-400 text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="font-display text-2xl font-extrabold tracking-tight text-white flex items-center gap-1">
+                        APEX<span class="text-blue-500">NODE</span>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Storefront Nav Links -->
+            <nav id="store-nav" class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+                <a href="#game-servers" class="hover:text-blue-400 transition-colors">Game Servers</a>
+                <a href="#vps-hosting" class="hover:text-blue-400 transition-colors">VPS Hosting</a>
+                <a href="#dedicated-servers" class="hover:text-blue-400 transition-colors">Dedicated Servers</a>
+                <a href="#contact" class="hover:text-blue-400 transition-colors">Contact us</a>
+            </nav>
+
+            <!-- Mode Selector / Actions -->
+            <div class="flex items-center gap-3">
+                <button id="btn-view-store" onclick="switchView('store')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-store"></i> Storefront
+                </button>
+
+                <button id="btn-view-panel" onclick="switchView('panel')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold px-4 py-2.5 rounded-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-gauge-high text-emerald-400"></i> Client Panel
+                </button>
+
+                <button onclick="openAdminModal()" class="bg-indigo-950/60 hover:bg-indigo-900/80 text-indigo-300 border border-indigo-700/50 text-xs font-semibold px-3 py-2.5 rounded-lg transition" title="Admin Control">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: STOREFRONT (VibeGames Style Layout) -->
+    <!-- ========================================== -->
+    <main id="view-storefront" class="flex-grow">
+        <!-- Hero Banner -->
+        <section class="relative hero-bg pt-20 pb-24 border-b border-slate-800/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                
+                <h1 class="font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-white uppercase mb-4 drop-shadow-md">
+                    Game Server Hosting
+                </h1>
+                
+                <!-- Flag Locations Slider Row -->
+                <div class="flex flex-wrap items-center justify-center gap-3 my-6">
+                    <img src="https://flagcdn.com/w40/nl.png" class="flag-icon" title="Netherlands" alt="NL">
+                    <img src="https://flagcdn.com/w40/de.png" class="flag-icon" title="Germany" alt="DE">
+                    <img src="https://flagcdn.com/w40/us.png" class="flag-icon" title="United States" alt="US">
+                    <img src="https://flagcdn.com/w40/gb.png" class="flag-icon" title="United Kingdom" alt="UK">
+                    <img src="https://flagcdn.com/w40/tr.png" class="flag-icon" title="Turkey" alt="TR">
+                    <img src="https://flagcdn.com/w40/fr.png" class="flag-icon" title="France" alt="FR">
+                    <img src="https://flagcdn.com/w40/jp.png" class="flag-icon" title="Japan" alt="JP">
+                    <img src="https://flagcdn.com/w40/br.png" class="flag-icon" title="Brazil" alt="BR">
+                    <img src="https://flagcdn.com/w40/au.png" class="flag-icon" title="Australia" alt="AU">
+                </div>
+
+                <p class="text-slate-300 text-sm sm:text-base font-semibold tracking-wider uppercase mb-8">
+                    Worldwide Servers From <span class="text-blue-400 font-bold">€ 1,50 / Month</span>.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#game-servers" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3.5 rounded-lg shadow-xl shadow-blue-600/30 transition">
+                        Order Now
+                    </a>
+                    <div class="flex items-center gap-2 text-emerald-400 text-xs font-semibold bg-emerald-950/40 border border-emerald-800/50 px-4 py-3 rounded-lg">
+                        <i class="fa-solid fa-shield-virus"></i>
+                        DDoS Protection Included
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section class="grid-container" id="packages-grid">
-            <!-- Dynamic packages render here -->
+        <!-- Game Servers Catalog Section -->
+        <section id="game-servers" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 text-center">
+                <h2 class="font-display text-2xl font-bold uppercase tracking-wider text-slate-100 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-gamepad text-blue-500"></i>
+                    Shared Game Servers
+                </h2>
+                <p class="text-xs text-slate-400 mt-1">Instant deployment • High Clock AMD Ryzen CPUs • Pterodactyl Control Panel</p>
+            </div>
+
+            <!-- Top Games Grid -->
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Top Games</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12" id="top-games-grid">
+                <!-- Dynamically Populated -->
+            </div>
+
+            <!-- More Games Grid -->
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">More Games</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" id="more-games-grid">
+                <!-- Dynamically Populated -->
+            </div>
         </section>
+
+        <!-- VPS Hosting Section -->
+        <section id="vps-hosting" class="py-16 bg-[#070a12] border-t border-b border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center mb-10">
+                    <h2 class="font-display text-3xl font-extrabold uppercase text-white tracking-wide">
+                        VPS Hosting
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-2">Ultra-fast KVM NVMe virtual private servers built for low latency</p>
+                </div>
+
+                <!-- Locations Row -->
+                <div class="mb-8">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Datacentre Locations</p>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                        <button class="flex items-center gap-3 bg-blue-600/20 border border-blue-500 text-white p-3 rounded-xl font-medium text-xs">
+                            <img src="https://flagcdn.com/w40/nl.png" class="flag-icon" alt="NL">
+                            <div class="text-left">
+                                <div class="font-bold">Amsterdam</div>
+                                <div class="text-[10px] text-slate-400">Netherlands</div>
+                            </div>
+                        </button>
+                        <button class="flex items-center gap-3 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 p-3 rounded-xl font-medium text-xs">
+                            <img src="https://flagcdn.com/w40/de.png" class="flag-icon" alt="DE">
+                            <div class="text-left">
+                                <div class="font-bold">Frankfurt</div>
+                                <div class="text-[10px] text-slate-400">Germany</div>
+                            </div>
+                        </button>
+                        <button class="flex items-center gap-3 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 p-3 rounded-xl font-medium text-xs">
+                            <img src="https://flagcdn.com/w40/tr.png" class="flag-icon" alt="TR">
+                            <div class="text-left">
+                                <div class="font-bold">Istanbul</div>
+                                <div class="text-[10px] text-slate-400">Turkey</div>
+                            </div>
+                        </button>
+                        <button class="flex items-center gap-3 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 p-3 rounded-xl font-medium text-xs">
+                            <img src="https://flagcdn.com/w40/us.png" class="flag-icon" alt="US">
+                            <div class="text-left">
+                                <div class="font-bold">New York</div>
+                                <div class="text-[10px] text-slate-400">United States</div>
+                            </div>
+                        </button>
+                        <button class="flex items-center gap-3 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 p-3 rounded-xl font-medium text-xs">
+                            <img src="https://flagcdn.com/w40/gb.png" class="flag-icon" alt="UK">
+                            <div class="text-left">
+                                <div class="font-bold">London</div>
+                                <div class="text-[10px] text-slate-400">United Kingdom</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VPS Spec Table -->
+                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-[#0c121e]">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px] tracking-wider">
+                                <th class="p-4">CPU Spec</th>
+                                <th class="p-4">RAM</th>
+                                <th class="p-4">Storage</th>
+                                <th class="p-4">Network</th>
+                                <th class="p-4">Delivery</th>
+                                <th class="p-4 text-right">Price</th>
+                                <th class="p-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 font-medium" id="vps-table-body">
+                            <!-- Dynamic Table Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dedicated Servers Section -->
+        <section id="dedicated-servers" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="font-display text-3xl font-extrabold uppercase text-white tracking-wide">
+                    Dedicated Bare Metal
+                </h2>
+                <p class="text-xs text-slate-400 mt-2">Unthrottled enterprise hardware for heavy gaming workloads</p>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-800 bg-[#0c121e]">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px] tracking-wider">
+                            <th class="p-4">Hardware Model</th>
+                            <th class="p-4">RAM</th>
+                            <th class="p-4">Storage</th>
+                            <th class="p-4">Network</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4 text-right">Monthly</th>
+                            <th class="p-4 text-center">Configure</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 font-medium" id="dedicated-table-body">
+                        <!-- Dynamic Table Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Contact Support Form -->
+        <section id="contact" class="py-16 bg-[#070a12] border-t border-slate-800/80">
+            <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-8">
+                    <h2 class="font-display text-2xl font-extrabold uppercase text-white tracking-wide">
+                        Contact Support
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">No account needed. Send us your question and we reply by e-mail.</p>
+                </div>
+
+                <form onsubmit="handleSupportSubmit(event)" class="glass-card p-6 sm:p-8 rounded-2xl space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Your name</label>
+                            <input type="text" required placeholder="Jane Doe" class="w-full bg-slate-900/90 border border-slate-700 focus:border-blue-500 rounded-lg px-3.5 py-2.5 text-xs text-white outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">E-mail address</label>
+                            <input type="email" required placeholder="you@example.com" class="w-full bg-slate-900/90 border border-slate-700 focus:border-blue-500 rounded-lg px-3.5 py-2.5 text-xs text-white outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Category</label>
+                        <select class="w-full bg-slate-900/90 border border-slate-700 focus:border-blue-500 rounded-lg px-3.5 py-2.5 text-xs text-white outline-none">
+                            <option>General Inquiries</option>
+                            <option>Technical Support</option>
+                            <option>Billing & Sales</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Subject</label>
+                        <input type="text" required placeholder="A short summary of your question" class="w-full bg-slate-900/90 border border-slate-700 focus:border-blue-500 rounded-lg px-3.5 py-2.5 text-xs text-white outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Message</label>
+                        <textarea rows="4" required placeholder="Describe your question or problem in detail." class="w-full bg-slate-900/90 border border-slate-700 focus:border-blue-500 rounded-lg px-3.5 py-2.5 text-xs text-white outline-none resize-none"></textarea>
+                    </div>
+
+                    <!-- Cloudflare Turnstile Box Simulation -->
+                    <div class="bg-slate-900/80 border border-slate-700 rounded-lg p-3 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" id="cf-check" required class="w-4 h-4 rounded bg-slate-800 border-slate-600 text-blue-600 focus:ring-0">
+                            <label for="cf-check" class="text-xs text-slate-300 font-medium cursor-pointer">Verify you are human</label>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-[10px] text-slate-500">
+                            <i class="fa-solid fa-shield-halved text-orange-400"></i> Cloudflare
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg shadow-lg shadow-blue-600/30 transition text-xs uppercase tracking-wider">
+                        Send message
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 2: PTERODACTYL CLIENT PANEL (Exact Match to User Screenshot) -->
+    <!-- ============================================================== -->
+    <main id="view-client-panel" class="hidden flex-grow ptero-bg relative min-h-[85vh] flex">
+        
+        <!-- Left Icon Sidebar -->
+        <aside class="w-16 bg-[#090d16] border-r border-slate-800/80 flex flex-col items-center py-4 space-y-6 z-10 shrink-0">
+            <!-- Home Icon (Active Glowing Green Line) -->
+            <button class="w-10 h-10 rounded-lg bg-emerald-500/15 text-emerald-400 border-l-2 border-emerald-400 flex items-center justify-center text-base transition">
+                <i class="fa-solid fa-house"></i>
+            </button>
+
+            <button class="w-10 h-10 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 flex items-center justify-center text-base transition" title="Servers">
+                <i class="fa-solid fa-server"></i>
+            </button>
+
+            <button class="w-10 h-10 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 flex items-center justify-center text-base transition" title="Analytics">
+                <i class="fa-solid fa-chart-simple"></i>
+            </button>
+
+            <button class="w-10 h-10 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 flex items-center justify-center text-base transition" title="Discord Community">
+                <i class="fa-brands fa-discord"></i>
+            </button>
+
+            <div class="flex-grow"></div>
+
+            <button onclick="openAdminModal()" class="w-10 h-10 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 flex items-center justify-center text-base transition" title="Settings">
+                <i class="fa-solid fa-sliders"></i>
+            </button>
+
+            <button class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-base transition" title="Account Status">
+                <i class="fa-solid fa-face-smile"></i>
+            </button>
+
+            <button onclick="switchView('store')" class="w-10 h-10 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-800/50 flex items-center justify-center text-base transition" title="Logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </aside>
+
+        <!-- Main Panel Content Area -->
+        <div class="flex-grow p-6 sm:p-10 relative z-10 overflow-y-auto">
+            
+            <!-- Background Custom Watermark text matching image -->
+            <div class="ptero-watermark">
+                HELIOS<span class="text-slate-800">NODE</span><br>
+                <span class="text-xs tracking-widest opacity-40 font-mono">MANAGE YOUR SERVERS</span>
+            </div>
+
+            <div class="max-w-5xl mx-auto space-y-6">
+                
+                <!-- Panel Header / Live Server Filter Bar -->
+                <div class="flex items-center justify-between pb-4 border-b border-slate-800/60">
+                    <div>
+                        <h2 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+                            <span>Your Game Servers</span>
+                            <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-full border border-slate-700 font-mono" id="server-count-badge">1 Active</span>
+                        </h2>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <button onclick="toggleTerminalModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3.5 py-2 rounded-lg border border-slate-700 transition flex items-center gap-2">
+                            <i class="fa-solid fa-terminal text-emerald-400"></i> Open Console
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pterodactyl Server Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="panel-servers-container">
+                    <!-- Dynamic Pterodactyl Cards Rendered Here -->
+                </div>
+
+                <!-- Footer Copyright info inside panel -->
+                <div class="pt-16 text-center text-[11px] text-slate-500 font-mono space-y-1">
+                    <div>ApexNode Hosting Provider</div>
+                    <div>Pterodactyl® © 2015 - 2026</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Quick Action Button in bottom right -->
+        <div class="fixed bottom-6 right-6 z-20">
+            <button onclick="toggleTerminalModal()" class="w-11 h-11 bg-slate-800 border border-slate-700 hover:border-amber-400 text-amber-400 rounded-xl shadow-xl flex items-center justify-center transition">
+                <i class="fa-solid fa-sun text-lg"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: LIVE TERMINAL CONSOLE -->
+    <!-- ========================================== -->
+    <div id="terminal-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-[#0b0f19] border border-slate-800 w-full max-w-3xl rounded-xl shadow-2xl overflow-hidden">
+            <div class="bg-[#121826] px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2 text-xs font-mono text-slate-300">
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+                    <span>root@apexnode-nl-01:~# node server.js</span>
+                </div>
+                <button onclick="toggleTerminalModal()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="p-4 bg-[#080b12] font-mono text-xs text-emerald-400 h-80 overflow-y-auto space-y-1" id="terminal-logs">
+                <p class="text-slate-500">[SYSTEM] Initializing Pterodactyl v1.11.3 container instance...</p>
+                <p class="text-slate-500">[SYSTEM] Allocation assigned: 185.220.220.42:30120</p>
+                <p>[INFO] Starting NoordKust RolePlay FXServer runtime...</p>
+                <p>[INFO] Loading resource es_extended...</p>
+                <p>[INFO] Loading resource qb-core...</p>
+                <p>[INFO] Authenticating license key with Keymaster...</p>
+                <p class="text-cyan-400">[SUCCESS] Server initialized on port 30120 (0.00ms latency)</p>
+            </div>
+
+            <div class="p-3 bg-[#121826] border-t border-slate-800 flex items-center gap-2">
+                <span class="text-xs font-mono text-slate-500">&gt;</span>
+                <input type="text" id="terminal-cmd-input" placeholder="Type a command (e.g. say Hello World, status, restart)..." onkeydown="if(event.key === 'Enter') executeCommand()" class="w-full bg-transparent text-xs font-mono text-white outline-none">
+                <button onclick="executeCommand()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded transition">
+                    Send
+                </button>
+            </div>
+        </div>
     </div>
 
-    <!-- ADMIN PANEL VIEW -->
-    <div id="admin-view" class="view-section">
-        <div class="admin-wrapper">
-            <div class="admin-header">
-                <div>
-                    <h1><i class="fas fa-sliders-h"></i> NexusNode Admin Console</h1>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Beheer hostingpakketten en Pterodactyl API instellingen live vanuit de browser.</p>
+    <!-- ========================================== -->
+    <!-- MODAL 2: ADMIN CONTROL PANEL (admin123) -->
+    <!-- ========================================== -->
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-xl rounded-2xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Login View -->
+            <div id="admin-login-view">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 bg-blue-600/20 text-blue-400 border border-blue-500/30 rounded-xl flex items-center justify-center mx-auto mb-2">
+                        <i class="fa-solid fa-lock text-xl"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white">Admin Authentication</h3>
+                    <p class="text-xs text-slate-400">Enter password to manage products, prices, and panel servers</p>
                 </div>
-                <button class="btn-order" style="width: auto; padding: 8px 16px; background: rgba(255,255,255,0.1); color: #fff;" onclick="switchView('store')">
-                    <i class="fas fa-arrow-left"></i> Terug naar Store
+
+                <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                    <div>
+                        <input type="password" id="admin-pass-input" placeholder="Password (default: admin123)" class="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 rounded-lg px-4 py-3 text-sm text-white outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition text-xs uppercase tracking-wider">
+                        Authenticate
+                    </button>
+                </form>
+            </div>
+
+            <!-- Admin Settings View (Unlocked) -->
+            <div id="admin-dashboard-view" class="hidden space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div>
+                        <h3 class="font-display text-lg font-bold text-white">ApexNode Admin Panel</h3>
+                        <p class="text-xs text-slate-400">Manage client panel servers & storefront prices</p>
+                    </div>
+                    <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-500/30">Authenticated</span>
+                </div>
+
+                <!-- Pterodactyl URL Settings -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <h4 class="text-xs font-bold uppercase text-blue-400 flex items-center gap-2">
+                        <i class="fa-solid fa-link"></i> External Pterodactyl URL
+                    </h4>
+                    <div>
+                        <input type="text" id="pterodactyl-url-input" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white outline-none">
+                    </div>
+                    <button onclick="savePterodactylUrl()" class="bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded hover:bg-blue-500 transition">
+                        Save Pterodactyl URL
+                    </button>
+                </div>
+
+                <!-- Add New Client Panel Server -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <h4 class="text-xs font-bold uppercase text-emerald-400 flex items-center gap-2">
+                        <i class="fa-solid fa-plus-circle"></i> Add Server to Client Panel
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="text" id="new-server-title" placeholder="Server Title (e.g. NoordKust RolePlay)" class="bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white outline-none">
+                        <input type="text" id="new-server-desc" placeholder="Tags/Description (e.g. 🌊 Roleplay 👮 Staff)" class="bg-slate-900 border border-slate-700 rounded px-3 py-2 text-xs text-white outline-none">
+                    </div>
+                    <button onclick="addNewClientServer()" class="bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded hover:bg-emerald-500 transition">
+                        Create Panel Instance
+                    </button>
+                </div>
+
+                <!-- Price Modifier -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <h4 class="text-xs font-bold uppercase text-cyan-400 flex items-center gap-2">
+                        <i class="fa-solid fa-tag"></i> Storefront Pricing
+                    </h4>
+                    <div id="admin-packages-list" class="space-y-2 max-h-40 overflow-y-auto pr-2">
+                        <!-- Dynamic Editable Packages -->
+                    </div>
+                </div>
+
+                <button onclick="closeAdminModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2.5 rounded-lg">
+                    Close Admin Panel
                 </button>
             </div>
 
-            <div class="admin-grid">
-                <!-- Package Form -->
-                <div class="admin-card">
-                    <h2 id="form-title"><i class="fas fa-plus-circle"></i> Pakket Toevoegen / Bewerken</h2>
-                    <form id="package-form" onsubmit="savePackage(event)">
-                        <input type="hidden" id="pack-id">
-                        
-                        <div class="form-group">
-                            <label>Pakket Naam</label>
-                            <input type="text" id="pack-name" placeholder="bv. FiveM Pro Server" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Categorie</label>
-                            <select id="pack-category" required>
-                                <option value="fivem">FiveM RP</option>
-                                <option value="minecraft">Minecraft Server</option>
-                                <option value="discord">Discord Bot</option>
-                            </select>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Prijs (€ / maand)</label>
-                                <input type="number" step="0.01" id="pack-price" placeholder="9.99" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Pterodactyl Egg ID</label>
-                                <input type="number" id="pack-egg" placeholder="15" required>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>RAM (MB)</label>
-                                <input type="number" id="pack-ram" placeholder="4096" required>
-                            </div>
-                            <div class="form-group">
-                                <label>CPU Limit (%)</label>
-                                <input type="number" id="pack-cpu" placeholder="200" required>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>NVMe Disk (MB)</label>
-                                <input type="number" id="pack-disk" placeholder="25000" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Popular Tag?</label>
-                                <select id="pack-popular">
-                                    <option value="false">Nee</option>
-                                    <option value="true">Ja</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn-save"><i class="fas fa-save"></i> Pakket Opslaan</button>
-                    </form>
-                </div>
-
-                <!-- Package List & Pterodactyl Config -->
-                <div>
-                    <div class="admin-card" style="margin-bottom: 25px;">
-                        <h2><i class="fas fa-plug"></i> Pterodactyl Integration Settings</h2>
-                        <div class="form-group">
-                            <label>Pterodactyl Panel URL</label>
-                            <input type="url" id="ptero-url-input" placeholder="https://panel.nexusnode.net" onchange="updatePteroUrl()">
-                        </div>
-                        <div class="form-group">
-                            <label>Pterodactyl Application API Key</label>
-                            <input type="password" id="ptero-key-input" placeholder="ptla_xxxxxxxxxxxxxxxxxxxxxxxx" onchange="savePteroKey()">
-                        </div>
-                    </div>
-
-                    <div class="admin-card">
-                        <h2><i class="fas fa-boxes"></i> Bestaande Pakketten Aanpassen</h2>
-                        <div class="pack-management-list" id="admin-packages-list">
-                            <!-- Dynamic admin list -->
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- ADMIN LOGIN MODAL -->
-    <div class="modal-overlay" id="admin-modal">
-        <div class="modal-box">
-            <h2 style="margin-bottom: 10px;"><i class="fas fa-lock"></i> Admin Beveiliging</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Voer het beheerderswachtwoord in om pakketten te bewerken.</p>
-            <div class="form-group">
-                <input type="password" id="admin-pass-input" placeholder="Wachtwoord (Standaard: admin123)">
+    <!-- Storefront Footer -->
+    <footer id="store-footer" class="bg-[#05080f] border-t border-slate-900 py-12 text-slate-400 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            
+            <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+                        <i class="fa-solid fa-cube text-sm"></i>
+                    </div>
+                    <span class="font-display text-lg font-bold text-white tracking-wider">APEXNODE</span>
+                </div>
+                <p class="text-slate-500 text-[11px] leading-relaxed">
+                    ApexNode B.V. Enterprise game server & VPS hosting with automated DDoS mitigation and fast deployment.
+                </p>
+                <div class="text-[10px] text-slate-600">
+                    KVK 86823345 • VAT NL864099575B01
+                </div>
             </div>
-            <button class="btn-order" onclick="authenticateAdmin()">Inloggen</button>
-        </div>
-    </div>
 
+            <div>
+                <h4 class="text-slate-200 font-bold mb-3 uppercase text-[11px] tracking-wider">Popular Game Servers</h4>
+                <ul class="space-y-1.5 text-slate-500">
+                    <li><a href="#" class="hover:text-blue-400">FiveM Server Hosting</a></li>
+                    <li><a href="#" class="hover:text-blue-400">Minecraft Servers</a></li>
+                    <li><a href="#" class="hover:text-blue-400">Rust Servers</a></li>
+                    <li><a href="#" class="hover:text-blue-400">CS2 Servers</a></li>
+                    <li><a href="#" class="hover:text-blue-400">Palworld Hosting</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-slate-200 font-bold mb-3 uppercase text-[11px] tracking-wider">Other Products</h4>
+                <ul class="space-y-1.5 text-slate-500">
+                    <li><a href="#" class="hover:text-blue-400">Dedicated Servers</a></li>
+                    <li><a href="#" class="hover:text-blue-400">Virtual Private Servers</a></li>
+                    <li><a href="#" class="hover:text-blue-400">Discord Bot Hosting</a></li>
+                    <li><a href="#" class="hover:text-blue-400">Web Hosting</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-slate-200 font-bold mb-3 uppercase text-[11px] tracking-wider">Resources</h4>
+                <ul class="space-y-1.5 text-slate-500">
+                    <li><a href="#contact" class="hover:text-blue-400">Help Centre</a></li>
+                    <li><a href="#contact" class="hover:text-blue-400">Open a Ticket</a></li>
+                    <li><a href="#" class="hover:text-blue-400">Terms of Service</a></li>
+                    <li><a href="#" class="hover:text-blue-400">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-slate-600 text-[11px]">
+            <div>&copy; 2026 ApexNode B.V. All rights reserved.</div>
+            <div class="flex items-center space-x-4 mt-4 sm:mt-0">
+                <i class="fa-brands fa-discord hover:text-slate-300"></i>
+                <i class="fa-brands fa-twitter hover:text-slate-300"></i>
+                <i class="fa-brands fa-youtube hover:text-slate-300"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application State & Interactive Logic -->
     <script>
-        // Default Dataset stored locally
-        const defaultPackages = [
-            { id: 1, name: "FiveM Starter", category: "fivem", price: "7.99", ram: "4096", cpu: "150", disk: "15000", egg: 1, popular: false },
-            { id: 2, name: "FiveM Advanced RP", category: "fivem", price: "14.99", ram: "8192", cpu: "300", disk: "30000", egg: 1, popular: true },
-            { id: 3, name: "Minecraft PaperSpigot", category: "minecraft", price: "4.50", ram: "4096", cpu: "200", disk: "20000", egg: 2, popular: false },
-            { id: 4, name: "Discord Bot Node.js", category: "discord", price: "1.99", ram: "1024", cpu: "50", disk: "5000", egg: 3, popular: false }
-        ];
+        // State Management
+        let appState = {
+            activeView: 'store', // 'store' or 'panel'
+            pterodactylUrl: localStorage.getItem('apex_ptero_url') || 'https://panel.apexnodes.net',
+            adminPass: 'admin123',
+            topGames: [
+                { id: 'tf2', name: 'Team Fortress 2', price: '1.50', img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80' },
+                { id: 'fivem', name: 'FiveM Servers', price: '2.50', img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80' },
+                { id: 'rust', name: 'Rust Servers', price: '3.00', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80' },
+                { id: 'mc', name: 'Minecraft Java', price: '2.00', img: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=600&q=80' }
+            ],
+            moreGames: [
+                { name: 'CS2 Servers', price: '2.50' },
+                { name: 'Palworld', price: '4.00' },
+                { name: 'Garry\'s Mod', price: '2.00' },
+                { name: 'DayZ', price: '4.50' },
+                { name: 'V Rising', price: '3.50' },
+                { name: 'ARK 1 & 2', price: '4.00' },
+                { name: 'Satisfactory', price: '3.00' },
+                { name: 'Assetto Corsa', price: '2.50' },
+                { name: 'Discord Bot', price: '1.00' },
+                { name: 'Left 4 Dead 2', price: '1.50' },
+                { name: 'Unturned', price: '1.50' },
+                { name: 'TF2 Classic', price: '1.50' }
+            ],
+            vpsPlans: [
+                { cpu: '2x Ryzen 9 7900X', ram: '4GB DDR5', storage: '80GB NVMe SSD', net: '2.5 Gbit/s', price: '8.50' },
+                { cpu: '4x Ryzen 9 7900X', ram: '8GB DDR5', storage: '160GB NVMe SSD', net: '2.5 Gbit/s', price: '16.00' },
+                { cpu: '6x Ryzen 9 7900X', ram: '16GB DDR5', storage: '240GB NVMe SSD', net: '5.0 Gbit/s', price: '29.00' },
+                { cpu: '8x Ryzen 9 7900X', ram: '32GB DDR5', storage: '400GB NVMe SSD', net: '10 Gbit/s', price: '52.00' }
+            ],
+            dedicatedPlans: [
+                { cpu: 'AMD Ryzen 7 7800X3D', ram: '64GB DDR5', storage: '2x 1TB NVMe SSD', net: '10 Gbit/s', status: 'Instant', price: '115.00' },
+                { cpu: 'AMD Ryzen 9 7950X', ram: '128GB DDR5', storage: '2x 2TB NVMe SSD', net: '10 Gbit/s', status: 'Instant', price: '185.00' },
+                { cpu: 'AMD EPYC 9354', ram: '256GB DDR5', storage: '4x 2TB NVMe SSD', net: '25 Gbit/s', status: 'Contact', price: '390.00' }
+            ],
+            // Pterodactyl Client Panel Servers (Matching Screenshot)
+            panelServers: [
+                {
+                    id: 'srv-1',
+                    title: 'NoordKust RolePlay',
+                    description: '🌊 **Noordkust Roleplay** 🏡 ✅ Actieve community ✅ Realistische roleplay ✅ Unieke jobs 💼 ✅ Leuke evenementen 🛠️ ✅ Professionele staff 👮 🌟...',
+                    status: 'running',
+                    cpu: 28.17,
+                    cpuMax: 100,
+                    ram: 456.89,
+                    ramMax: 4096,
+                    disk: 14.6,
+                    diskMax: 80
+                }
+            ]
+        };
 
-        let packages = JSON.parse(localStorage.getItem('nexus_packages')) || defaultPackages;
-        let pteroUrl = localStorage.getItem('nexus_ptero_url') || 'https://panel.nexusnode.net';
-        let isAdminLoggedIn = false;
+        // Switch View Mode (Store vs Pterodactyl Panel)
+        function switchView(viewName) {
+            appState.activeView = viewName;
+            const storeEl = document.getElementById('view-storefront');
+            const panelEl = document.getElementById('view-client-panel');
+            const footerEl = document.getElementById('store-footer');
+            const navEl = document.getElementById('store-nav');
 
-        // Initialize App
-        document.addEventListener('DOMContentLoaded', () => {
-            renderPackages('all');
-            document.getElementById('ptero-url-input').value = pteroUrl;
-            document.getElementById('pteroNavLink').href = pteroUrl;
-        });
+            const btnStore = document.getElementById('btn-view-store');
+            const btnPanel = document.getElementById('btn-view-panel');
 
-        // Store Render
-        function renderPackages(filter = 'all') {
-            const grid = document.getElementById('packages-grid');
-            grid.innerHTML = '';
+            if (viewName === 'panel') {
+                storeEl.classList.add('hidden');
+                footerEl.classList.add('hidden');
+                navEl.classList.add('hidden');
+                panelEl.classList.remove('hidden');
 
-            const filtered = filter === 'all' ? packages : packages.filter(p => p.category === filter);
+                btnPanel.className = 'bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition flex items-center gap-2 shadow-lg shadow-emerald-600/30';
+                btnStore.className = 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold px-4 py-2.5 rounded-lg transition flex items-center gap-2';
+                
+                renderPanelServers();
+            } else {
+                panelEl.classList.add('hidden');
+                storeEl.classList.remove('hidden');
+                footerEl.classList.remove('hidden');
+                navEl.classList.remove('hidden');
 
-            filtered.forEach(p => {
-                const icon = p.category === 'fivem' ? 'fa-car' : p.category === 'minecraft' ? 'fa-cube' : 'fa-discord';
-                const card = document.createElement('div');
-                card.className = 'pack-card';
-                card.innerHTML = `
-                    ${p.popular === 'true' || p.popular === true ? '<div class="badge-popular">Populair</div>' : ''}
-                    <div>
-                        <div class="card-header">
-                            <i class="fas ${icon}"></i>
-                            <div>
-                                <h3>${p.name}</h3>
-                                <span style="font-size: 0.8rem; color: var(--accent-blue);">Egg ID: #${p.egg}</span>
-                            </div>
-                        </div>
-                        <div class="price-tag">€${p.price} <span>/maand</span></div>
-                        <ul class="specs-list">
-                            <li><i class="fas fa-memory"></i> ${p.ram} MB DDR4 RAM</li>
-                            <li><i class="fas fa-microchip"></i> ${p.cpu}% CPU Kracht</li>
-                            <li><i class="fas fa-hdd"></i> ${p.disk} MB NVMe SSD</li>
-                            <li><i class="fas fa-shield-alt"></i> Path.net DDoS Protection</li>
-                            <li><i class="fas fa-bolt"></i> Instant Pterodactyl Setup</li>
-                        </ul>
+                btnStore.className = 'bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition flex items-center gap-2 shadow-lg shadow-blue-600/30';
+                btnPanel.className = 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold px-4 py-2.5 rounded-lg transition flex items-center gap-2';
+            }
+        }
+
+        // Render Functions for Storefront
+        function renderStorefront() {
+            renderTopGames();
+            renderMoreGames();
+            renderVPS();
+            renderDedicated();
+        }
+
+        function renderTopGames() {
+            const container = document.getElementById('top-games-grid');
+            container.innerHTML = appState.topGames.map(game => `
+                <div class="glass-card rounded-2xl overflow-hidden transition group flex flex-col justify-between">
+                    <div class="h-36 relative overflow-hidden">
+                        <img src="${game.img}" alt="${game.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0e1526] via-transparent to-transparent"></div>
                     </div>
-                    <button class="btn-order" onclick="deployPteroServer(${p.id})">Bestel & Deploy</button>
+                    <div class="p-4 pt-0">
+                        <h4 class="font-bold text-base text-white">${game.name}</h4>
+                        <div class="text-xs text-slate-400 mt-1">From <span class="text-emerald-400 font-bold">€ ${game.price}</span> /mo</div>
+                        <button onclick="deployServerPackage('${game.name}')" class="w-full mt-4 bg-blue-600/30 hover:bg-blue-600 border border-blue-500/50 hover:border-transparent text-white font-bold py-2 rounded-lg text-xs transition">
+                            Order Now
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderMoreGames() {
+            const container = document.getElementById('more-games-grid');
+            container.innerHTML = appState.moreGames.map(game => `
+                <div onclick="deployServerPackage('${game.name}')" class="glass-card p-3 rounded-xl hover:bg-slate-800/80 cursor-pointer transition flex flex-col justify-between">
+                    <div>
+                        <div class="font-bold text-xs text-slate-200">${game.name}</div>
+                        <div class="text-[10px] text-slate-400 mt-1">From <span class="text-emerald-400 font-semibold">€ ${game.price}</span>/mo</div>
+                    </div>
+                    <div class="mt-3 flex justify-end">
+                        <i class="fa-solid fa-chevron-right text-[10px] text-blue-400"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderVPS() {
+            const container = document.getElementById('vps-table-body');
+            container.innerHTML = appState.vpsPlans.map(plan => `
+                <tr class="hover:bg-slate-800/40 transition">
+                    <td class="p-4 font-bold text-white">${plan.cpu}</td>
+                    <td class="p-4 text-slate-300">${plan.ram}</td>
+                    <td class="p-4 text-slate-300">${plan.storage}</td>
+                    <td class="p-4 text-slate-300">${plan.net}</td>
+                    <td class="p-4"><span class="text-emerald-400 text-xs font-semibold">Instant</span></td>
+                    <td class="p-4 text-right font-bold text-white">€ ${plan.price} <span class="text-[10px] text-slate-400">/mo</span></td>
+                    <td class="p-4 text-center">
+                        <button onclick="deployServerPackage('VPS - ${plan.cpu}')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded text-xs transition">
+                            Order
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderDedicated() {
+            const container = document.getElementById('dedicated-table-body');
+            container.innerHTML = appState.dedicatedPlans.map(plan => `
+                <tr class="hover:bg-slate-800/40 transition">
+                    <td class="p-4 font-bold text-white">${plan.cpu}</td>
+                    <td class="p-4 text-slate-300">${plan.ram}</td>
+                    <td class="p-4 text-slate-300">${plan.storage}</td>
+                    <td class="p-4 text-slate-300">${plan.net}</td>
+                    <td class="p-4"><span class="text-emerald-400 text-xs font-semibold">${plan.status}</span></td>
+                    <td class="p-4 text-right font-bold text-white">€ ${plan.price} <span class="text-[10px] text-slate-400">/mo</span></td>
+                    <td class="p-4 text-center">
+                        <button onclick="deployServerPackage('Dedicated - ${plan.cpu}')" class="bg-slate-800 hover:bg-blue-600 text-white font-bold px-3 py-1.5 rounded text-xs transition">
+                            Configure
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Render Pterodactyl Panel Cards (Exact Match to Screenshot)
+        function renderPanelServers() {
+            const container = document.getElementById('panel-servers-container');
+            document.getElementById('server-count-badge').textContent = `${appState.panelServers.length} Active`;
+
+            if (appState.panelServers.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-2 text-center py-12 ptero-card rounded-2xl">
+                        <i class="fa-solid fa-server text-4xl text-slate-600 mb-3"></i>
+                        <p class="text-sm text-slate-400 font-medium">No active servers in your panel account.</p>
+                        <button onclick="switchView('store')" class="mt-4 bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-lg">Browse Storefront</button>
+                    </div>
                 `;
-                grid.appendChild(card);
-            });
-        }
-
-        // Filter Categories
-        function filterCategory(cat, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderPackages(cat);
-        }
-
-        // View Navigation
-        function switchView(view) {
-            if (view === 'admin' && !isAdminLoggedIn) {
-                openAdminModal();
                 return;
             }
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.getElementById(`${view}-view`).classList.add('active');
-            if(view === 'admin') renderAdminList();
-        }
 
-        // Admin Auth Modal
-        function openAdminModal() {
-            document.getElementById('admin-modal').classList.add('active');
-        }
+            container.innerHTML = appState.panelServers.map(srv => {
+                const isRunning = srv.status === 'running';
+                const cpuPct = isRunning ? srv.cpu : 0;
+                const ramVal = isRunning ? srv.ram : 0;
+                const diskVal = srv.disk;
 
-        function authenticateAdmin() {
-            const pass = document.getElementById('admin-pass-input').value;
-            if(pass === 'admin123' || pass === localStorage.getItem('nexus_admin_pass')) {
-                isAdminLoggedIn = true;
-                document.getElementById('admin-modal').classList.remove('active');
-                switchView('admin');
-            } else {
-                alert('Onjuist wachtwoord!');
-            }
-        }
+                return `
+                    <div class="ptero-card p-6 rounded-2xl relative overflow-hidden transition hover:border-slate-700">
+                        
+                        <!-- Header / Title -->
+                        <div class="flex items-start justify-between mb-2">
+                            <div>
+                                <h3 class="text-xl font-bold text-white tracking-wide flex items-center gap-2">
+                                    ${srv.title}
+                                    <span class="w-2.5 h-2.5 rounded-full ${isRunning ? 'bg-emerald-400 shadow-lg shadow-emerald-500/50' : 'bg-red-500'}"></span>
+                                </h3>
+                                <p class="text-[11px] text-slate-400 mt-1 leading-relaxed max-w-md line-clamp-2">
+                                    ${srv.description}
+                                </p>
+                            </div>
+                        </div>
 
-        // Admin Management Functions
-        function renderAdminList() {
-            const list = document.getElementById('admin-packages-list');
-            list.innerHTML = '';
+                        <!-- Resource Metrics Row (Exact Match to Screenshot Layout) -->
+                        <div class="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-slate-800/80">
+                            
+                            <!-- CPU Usage Metric -->
+                            <div>
+                                <div class="flex items-center gap-2 text-slate-300 text-xs font-semibold">
+                                    <i class="fa-solid fa-[#1e293b] fa-microchip text-slate-400"></i>
+                                    <span class="text-white font-mono">${cpuPct.toFixed(2)} %</span>
+                                </div>
+                                <div class="text-[10px] text-emerald-400 font-medium mt-1">
+                                    of ${srv.cpuMax} %
+                                </div>
+                                <div class="w-full bg-slate-900 h-1.5 rounded-full mt-2 overflow-hidden border border-slate-800">
+                                    <div class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: ${(cpuPct / srv.cpuMax) * 100}%"></div>
+                                </div>
+                            </div>
 
-            packages.forEach(p => {
-                const row = document.createElement('div');
-                row.className = 'pack-item-row';
-                row.innerHTML = `
-                    <div>
-                        <strong>${p.name}</strong> (${p.category.toUpperCase()})
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">€${p.price}/mnd - RAM: ${p.ram}MB - CPU: ${p.cpu}%</div>
-                    </div>
-                    <div class="pack-item-actions">
-                        <button class="btn-icon" onclick="editPackage(${p.id})"><i class="fas fa-edit"></i></button>
-                        <button class="btn-icon delete" onclick="deletePackage(${p.id})"><i class="fas fa-trash"></i></button>
+                            <!-- RAM Usage Metric -->
+                            <div>
+                                <div class="flex items-center gap-2 text-slate-300 text-xs font-semibold">
+                                    <i class="fa-solid fa-memory text-slate-400"></i>
+                                    <span class="text-white font-mono">${ramVal.toFixed(2)} MiB</span>
+                                </div>
+                                <div class="text-[10px] text-emerald-400 font-medium mt-1">
+                                    of ${(srv.ramMax / 1024).toFixed(0)} GiB
+                                </div>
+                                <div class="w-full bg-slate-900 h-1.5 rounded-full mt-2 overflow-hidden border border-slate-800">
+                                    <div class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: ${(ramVal / srv.ramMax) * 100}%"></div>
+                                </div>
+                            </div>
+
+                            <!-- DISK Usage Metric -->
+                            <div>
+                                <div class="flex items-center gap-2 text-slate-300 text-xs font-semibold">
+                                    <i class="fa-solid fa-hard-drive text-slate-400"></i>
+                                    <span class="text-white font-mono">${diskVal.toFixed(1)} GiB</span>
+                                </div>
+                                <div class="text-[10px] text-emerald-400 font-medium mt-1">
+                                    of ${srv.diskMax} GiB
+                                </div>
+                                <div class="w-full bg-slate-900 h-1.5 rounded-full mt-2 overflow-hidden border border-slate-800">
+                                    <div class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: ${(diskVal / srv.diskMax) * 100}%"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Power Controls -->
+                        <div class="mt-6 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <button onclick="setServerPower('${srv.id}', 'start')" class="bg-emerald-600/20 border border-emerald-500/40 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1.5 rounded text-xs font-bold transition">
+                                    <i class="fa-solid fa-play text-[10px]"></i> Start
+                                </button>
+                                <button onclick="setServerPower('${srv.id}', 'restart')" class="bg-amber-600/20 border border-amber-500/40 hover:bg-amber-600 text-amber-300 hover:text-white px-3 py-1.5 rounded text-xs font-bold transition">
+                                    <i class="fa-solid fa-rotate-right text-[10px]"></i> Restart
+                                </button>
+                                <button onclick="setServerPower('${srv.id}', 'stop')" class="bg-rose-600/20 border border-rose-500/40 hover:bg-rose-600 text-rose-300 hover:text-white px-3 py-1.5 rounded text-xs font-bold transition">
+                                    <i class="fa-solid fa-power-off text-[10px]"></i> Stop
+                                </button>
+                            </div>
+
+                            <button onclick="toggleTerminalModal()" class="text-xs text-slate-400 hover:text-white font-mono flex items-center gap-1.5">
+                                <i class="fa-solid fa-terminal"></i> Console
+                            </button>
+                        </div>
+
                     </div>
                 `;
-                list.appendChild(row);
-            });
+            }).join('');
         }
 
-        function savePackage(e) {
-            e.preventDefault();
-            const id = document.getElementById('pack-id').value;
-            const newPack = {
-                id: id ? parseInt(id) : Date.now(),
-                name: document.getElementById('pack-name').value,
-                category: document.getElementById('pack-category').value,
-                price: document.getElementById('pack-price').value,
-                egg: document.getElementById('pack-egg').value,
-                ram: document.getElementById('pack-ram').value,
-                cpu: document.getElementById('pack-cpu').value,
-                disk: document.getElementById('pack-disk').value,
-                popular: document.getElementById('pack-popular').value
+        // Live Simulated Server Stats Fluctuations
+        setInterval(() => {
+            appState.panelServers.forEach(srv => {
+                if (srv.status === 'running') {
+                    // Small fluctuation for real feel
+                    const cpuDelta = (Math.random() * 4) - 2;
+                    const ramDelta = (Math.random() * 10) - 5;
+                    
+                    srv.cpu = Math.min(Math.max(15, srv.cpu + cpuDelta), 95);
+                    srv.ram = Math.min(Math.max(300, srv.ram + ramDelta), srv.ramMax - 200);
+                }
+            });
+
+            if (appState.activeView === 'panel') {
+                renderPanelServers();
+            }
+        }, 3000);
+
+        // Power Control Handler
+        function setServerPower(serverId, action) {
+            const srv = appState.panelServers.find(s => s.id === serverId);
+            if (!srv) return;
+
+            const logs = document.getElementById('terminal-logs');
+
+            if (action === 'start') {
+                srv.status = 'running';
+                logs.innerHTML += `<p class="text-emerald-400">[POWER] Server ${srv.title} power state set to RUNNING</p>`;
+            } else if (action === 'stop') {
+                srv.status = 'stopped';
+                logs.innerHTML += `<p class="text-rose-400">[POWER] Server ${srv.title} power state set to STOPPED</p>`;
+            } else if (action === 'restart') {
+                srv.status = 'stopped';
+                logs.innerHTML += `<p class="text-amber-400">[POWER] Restarting server ${srv.title}...</p>`;
+                setTimeout(() => {
+                    srv.status = 'running';
+                    logs.innerHTML += `<p class="text-emerald-400">[POWER] Server ${srv.title} reboot completed.</p>`;
+                    renderPanelServers();
+                }, 1500);
+            }
+            renderPanelServers();
+        }
+
+        // Order trigger -> auto-provisions server to Client Panel
+        function deployServerPackage(packageName) {
+            const newSrv = {
+                id: 'srv-' + Date.now(),
+                title: packageName + ' Instance',
+                description: `⚡ Active ${packageName} hosted on AMD Ryzen High-Frequency node.`,
+                status: 'running',
+                cpu: 18.40,
+                cpuMax: 100,
+                ram: 512.00,
+                ramMax: 4096,
+                disk: 10.0,
+                diskMax: 50
             };
 
-            if(id) {
-                const index = packages.findIndex(p => p.id === parseInt(id));
-                packages[index] = newPack;
+            appState.panelServers.push(newSrv);
+            switchView('panel');
+        }
+
+        // Terminal Console Commands
+        function toggleTerminalModal() {
+            const modal = document.getElementById('terminal-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function executeCommand() {
+            const input = document.getElementById('terminal-cmd-input');
+            const cmd = input.value.trim();
+            if (!cmd) return;
+
+            const logs = document.getElementById('terminal-logs');
+            logs.innerHTML += `<p class="text-white">&gt; ${cmd}</p>`;
+
+            if (cmd.toLowerCase() === 'status') {
+                logs.innerHTML += `<p class="text-cyan-400">[STATUS] All services online. Ping: 12ms.</p>`;
+            } else if (cmd.toLowerCase().startsWith('say')) {
+                logs.innerHTML += `<p class="text-amber-300">[BROADCAST] ${cmd.replace('say', '')}</p>`;
             } else {
-                packages.push(newPack);
+                logs.innerHTML += `<p class="text-slate-400">[CONSOLE] Executed command: ${cmd}</p>`;
             }
 
-            localStorage.setItem('nexus_packages', JSON.stringify(packages));
-            renderAdminList();
-            renderPackages('all');
-            resetForm();
-            alert('Pakket opgeslagen!');
+            input.value = '';
+            logs.scrollTop = logs.scrollHeight;
         }
 
-        function editPackage(id) {
-            const p = packages.find(item => item.id === id);
-            if(!p) return;
-            document.getElementById('pack-id').value = p.id;
-            document.getElementById('pack-name').value = p.name;
-            document.getElementById('pack-category').value = p.category;
-            document.getElementById('pack-price').value = p.price;
-            document.getElementById('pack-egg').value = p.egg;
-            document.getElementById('pack-ram').value = p.ram;
-            document.getElementById('pack-cpu').value = p.cpu;
-            document.getElementById('pack-disk').value = p.disk;
-            document.getElementById('pack-popular').value = p.popular;
-            document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Pakket Bewerken';
+        // Contact Support Submission
+        function handleSupportSubmit(e) {
+            e.preventDefault();
+            alert('Support request sent successfully! Our team will contact you via e-mail.');
+            e.target.reset();
         }
 
-        function deletePackage(id) {
-            if(confirm('Weet je zeker dat je dit pakket wilt verwijderen?')) {
-                packages = packages.filter(p => p.id !== id);
-                localStorage.setItem('nexus_packages', JSON.stringify(packages));
-                renderAdminList();
-                renderPackages('all');
+        // Admin Modal Logic
+        function openAdminModal() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === appState.adminPass) {
+                document.getElementById('admin-login-view').classList.add('hidden');
+                document.getElementById('admin-dashboard-view').classList.remove('hidden');
+                document.getElementById('pterodactyl-url-input').value = appState.pterodactylUrl;
+                renderAdminPackages();
+            } else {
+                alert('Incorrect admin password!');
             }
         }
 
-        function resetForm() {
-            document.getElementById('package-form').reset();
-            document.getElementById('pack-id').value = '';
-            document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Pakket Toevoegen';
+        function savePterodactylUrl() {
+            const url = document.getElementById('pterodactyl-url-input').value;
+            if (url) {
+                appState.pterodactylUrl = url;
+                localStorage.setItem('apex_ptero_url', url);
+                alert('Pterodactyl endpoint updated!');
+            }
         }
 
-        function updatePteroUrl() {
-            pteroUrl = document.getElementById('ptero-url-input').value;
-            localStorage.setItem('nexus_ptero_url', pteroUrl);
-            document.getElementById('pteroNavLink').href = pteroUrl;
+        function addNewClientServer() {
+            const title = document.getElementById('new-server-title').value.trim();
+            const desc = document.getElementById('new-server-desc').value.trim();
+
+            if (!title) {
+                alert('Please enter a server title');
+                return;
+            }
+
+            appState.panelServers.push({
+                id: 'srv-' + Date.now(),
+                title: title,
+                description: desc || '⚡ Custom provisioned server instance.',
+                status: 'running',
+                cpu: 25.0,
+                cpuMax: 100,
+                ram: 1024,
+                ramMax: 4096,
+                disk: 20,
+                diskMax: 80
+            });
+
+            document.getElementById('new-server-title').value = '';
+            document.getElementById('new-server-desc').value = '';
+
+            renderPanelServers();
+            alert('Server instance added to Client Panel!');
         }
 
-        function savePteroKey() {
-            const key = document.getElementById('ptero-key-input').value;
-            localStorage.setItem('nexus_ptero_key', key);
+        function renderAdminPackages() {
+            const container = document.getElementById('admin-packages-list');
+            container.innerHTML = appState.topGames.map((game, idx) => `
+                <div class="flex items-center justify-between text-xs bg-slate-900 p-2 rounded border border-slate-800">
+                    <span class="text-white font-medium">${game.name}</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-slate-400">€</span>
+                        <input type="text" value="${game.price}" onchange="updateGamePrice(${idx}, this.value)" class="w-16 bg-slate-950 border border-slate-700 text-white px-2 py-1 rounded">
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // Pterodactyl Provision Redirection
-        function deployPteroServer(packId) {
-            const pack = packages.find(p => p.id === packId);
-            alert(`Pterodactyl Deployment Handler:\n\nJe wordt doorverwezen naar het Pterodactyl Panel om de instant setup te voltooien voor: ${pack.name}\n\nAllocated Resources:\n- RAM: ${pack.ram} MB\n- Disk: ${pack.disk} MB\n- Egg ID: ${pack.egg}`);
-            window.open(pteroUrl, '_blank');
+        function updateGamePrice(index, newPrice) {
+            appState.topGames[index].price = newPrice;
+            renderTopGames();
         }
+
+        // Initialize on page load
+        window.onload = function() {
+            renderStorefront();
+            renderPanelServers();
+        };
     </script>
 </body>
 </html>
